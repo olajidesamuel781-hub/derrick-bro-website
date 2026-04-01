@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DERRICKBRO FRIENDSHIP TEST</title>
+
+<style>
+
+body {
+
+font-family: 'Arial', sans-serif;
+
+margin:0;
+
+padding:0;
+
+background: url('https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+
+background-size: cover;
+
+display:flex;
+
+justify-content:center;
+
+align-items:flex-start;
+
+min-height:100vh;
+
+}
+
+
+#splashScreen {
+position:fixed;
+top:0; left:0;
+width:100%; height:100%;
+background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:1000;
+transition: opacity 1s;
+}
+
+#splashScreen .logo {
+width:140px;
+height:140px;
+border-radius:50%;
+background: linear-gradient(135deg,#00c6ff,#0072ff);
+display:flex;
+justify-content:center;
+align-items:center;
+margin-bottom:20px;
+box-shadow: 0 0 40px rgba(0,198,255,0.9);
+}
+
+#splashScreen .logo span {
+font-size:70px;
+font-weight:bold;
+color:white;
+}
+
+#splashScreen h1 {
+font-size:40px;
+letter-spacing:3px;
+border-right: 3px solid white;
+white-space: nowrap;
+overflow: hidden;
+}
+
+@keyframes typing {
+from { width: 0; }
+to { width: 12ch; }
+}
+
+@keyframes blink {
+50% { border-color: transparent; }
+}
+
+.page {
+display: none;
+background: rgba(255,255,255,0.08);
+backdrop-filter: blur(15px);
+border-radius:20px;
+padding:20px;
+margin:20px;
+width:90%;
+max-width:500px;
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
+}
+
+h2 {
+text-align:center;
+color:white;
+}
+
+input, select {
+width:90%;
+padding:10px;
+margin:6px 0;
+border-radius:8px;
+border:none;
+font-size:16px;
+}
+
+button {
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+background: linear-gradient(45deg,#00c6ff,#0072ff);
+color:white;
+font-weight:bold;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+
+button:hover { opacity:0.9; }
+
+
+.question {
+
+margin-bottom:20px;
+
+border-radius:15px;
+
+color:#5ef60cfd;
+
+text-align:center;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+
+background-size: cover;
+
+background-position: center;
+
+min-height:200px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:flex-end;
+
+padding:15px;
+
+font-weight:bold;
+
+font-size:25px;
+
+}
+
+
+input.answer-box {
+
+border-radius:10px;
+
+border:1px solid #ccc;
+
+padding:8px;
+
+font-size:16px;
+
+width:90%;
+
+margin:10px auto;
+
+display:block;
+
+}
+
+
+table {
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+
+table, th, td {
+
+border:1px solid #ccc;
+
+}
+
+
+th, td {
+
+padding:10px;
+
+text-align:center;
+
+}
+
+
+th {
+
+background-color:#ff6f61;
+
+color:white;
+
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- SPLASH SCREEN -->
+
+<div id="splashScreen">
+
+<div class="logo"><span>D</span></div>
+
+<h1 id="derekText">DERRICK BROoo</h1>
+
+</div>
+
+
+<!-- LOGIN PAGE -->
+
+<div class="page" id="loginPage">
+
+<h2>Welcome to DERRICKBRO Friendship Quiz!</h2>
+
+<input type="text" id="username" placeholder="Your Name">
+
+<input type="text" id="phone" placeholder="Your Phone Number">
+
+<select id="country">
+
+<option value="">Select Country</option>
+
+<option value="NG">Nigeria (+234)</option>
+
+<option value="US">USA (+1)</option>
+
+<option value="UK">UK (+44)</option>
+
+<option value="CA">Canada (+1)</option>
+
+</select>
+
+<button onclick="registerUser()">Login / Register</button>
+
+</div>
+
+
+<!-- OWNER QUESTIONS PAGE -->
+
+<div class="page" id="ownerPage">
+
+<h2>Answer Questions About Yourself</h2>
+
+<div id="ownerQuestions"></div>
+
+<button onclick="saveOwnerAnswers()">Save & Get Share Link</button>
+
+</div>
+
+
+<!-- SHARE LINK PAGE -->
+
+<div class="page" id="sharePage">
+
+<h2>Share Your Quiz With Friends</h2>
+
+<p>Copy this link and send to your friends:</p>
+
+<input type="text" id="shareLink" readonly>
+
+<button onclick="copyLink()">Copy Link</button>
+
+</div>
+
+
+<!-- FRIEND QUIZ PAGE -->
+
+<div class="page" id="friendPage">
+
+<h2>How Well Do You Know <span id="friendOwnerName"></span>?</h2>
+
+<div id="friendQuestions"></div>
+
+<input type="text" id="friendName" placeholder="Your Name">
+
+<button onclick="submitFriendAnswers()">Submit Answers</button>
+
+</div>
+
+
+<!-- SCORES PAGE -->
+
+<div class="page" id="scorePage">
+
+<h2>Friendship Scores</h2>
+
+<table id="scoresTable">
+
+<thead><tr><th>Name</th><th>Score</th></tr></thead>
+
+<tbody></tbody>
+
+</table>
+
+</div>
+
+
+<script>
+
+// Questions with guaranteed images
+
+const defaultImg = "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?auto=format&fit=crop&w=600&q=80";
+
+const questions = [
+
+{ q:"What is your favorite color?", img:"https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg?t=st=1774482301~exp=1774485901~hmac=9aa853f726862ce6e2c7b4d0b3a9020fffeae9f2558125303acb876116480058&w=1480" },
+
+{ q:"What is your favorite food?", img:"https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=600&q=80" },
+
+{ q:"What is your favorite hobby?", img:"https://artfulparent.com/wp-content/uploads/2025/12/person-drawing-1024x538.png" },
+
+{ q:"What is your favorite movie?", img:"https://4kwallpapers.com/images/walls/thumbs_3t/13495.jpg" },
+
+{ q:"What is your favorite animal?", img:"https://static.vecteezy.com/system/resources/thumbnails/042/730/459/small_2x/lion-danger-animal-wildlife-nature-forest-photo.jpg" },
+
+{ q:"Who is your best friend?", img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" },
+
+{ q:"What is your favorite subject?", img:"https://static.vecteezy.com/system/resources/thumbnails/044/280/984/small_2x/stack-of-books-on-a-brown-background-concept-for-world-book-day-photo.jpg" },
+
+{ q:"What is your favorite bubble bath?", img:"https://images.stockcake.com/public/b/6/0/b606046c-d914-472c-891a-9543764d3497_large/floating-iridescent-bubbles-stockcake.jpg" },
+
+{ q:"Who do you hate?", img: defaultImg }
+
+];
+
+
+let currentUserId = null;
+
+
+// Simple phone validation
+
+function validatePhone(countryCode, phone){
+
+const num = phone.replace(/\D/g,'');
+
+if(countryCode==='NG' && num.length===10) return true;
+
+if((countryCode==='US'||countryCode==='CA') && num.length===10) return true;
+
+if(countryCode==='UK' && num.length>=10) return true;
+
+return false;
+
+}
+
+
+// Register/Login
+
+function registerUser(){
+
+const name = document.getElementById("username").value.trim();
+
+const phone = document.getElementById("phone").value.trim();
+
+const country = document.getElementById("country").value;
+
+if(!name || !phone || !country){ alert("Enter all fields"); return; }
+
+if(!validatePhone(country, phone)){ alert("Invalid phone number for selected country"); return; }
+
+
+currentUserId = Date.now();
+
+const user = { id:currentUserId, name:name, phone:phone, country:country, answers:[], friends:[] };
+
+localStorage.setItem("user_"+currentUserId, JSON.stringify(user));
+
+loadOwnerQuestions();
+
+showPage("ownerPage");
+
+}
+
+
+// Load owner questions
+
+function loadOwnerQuestions(){
+
+const container = document.getElementById("ownerQuestions");
+
+container.innerHTML = "";
+
+questions.forEach((q,i)=>{
+
+const div = document.createElement("div");
+
+div.className = "question";
+
+div.style.backgroundImage = `url(${q.img || defaultImg})`;
+
+div.innerHTML = `<p>${q.q}</p><input type="text" class="answer-box" id="ownerAnswer${i}" placeholder="Your Answer">`;
+
+container.appendChild(div);
+
+});
+
+}
+
+
+// Save owner answers
+
+function saveOwnerAnswers(){
+
+const user = JSON.parse(localStorage.getItem("user_"+currentUserId));
+
+user.answers = questions.map((_,i)=>document.getElementById("ownerAnswer"+i).value.trim());
+
+localStorage.setItem("user_"+currentUserId, JSON.stringify(user));
+
+document.getElementById("shareLink").value = window.location.href+"?owner="+currentUserId;
+
+showPage("sharePage");
+
+}
+
+
+// Copy link
+
+function copyLink(){
+
+const link = document.getElementById("shareLink");
+
+link.select();
+
+link.setSelectionRange(0, 99999);
+
+document.execCommand("copy");
+
+alert("Link copied!");
+
+}
+
+
+// Load friend page
+
+function loadFriendPage(ownerId){
+
+const owner = JSON.parse(localStorage.getItem("user_"+ownerId));
+
+if(!owner){ alert("Owner not found"); return; }
+
+document.getElementById("friendOwnerName").innerText = owner.name;
+
+
+const container = document.getElementById("friendQuestions");
+
+container.innerHTML = "";
+
+owner.answers.forEach((a,i)=>{
+
+const div = document.createElement("div");
+
+div.className = "question";
+
+div.style.backgroundImage = `url(${questions[i].img || defaultImg})`;
+
+div.innerHTML = `<p>Your friend asked: "${questions[i].q.replace('?',' is?')}"</p>
+
+<input type="text" class="answer-box" id="friendAnswer${i}" placeholder="Your Answer">`;
+
+container.appendChild(div);
+
+});
+
+showPage("friendPage");
+
+}
+
+
+// Submit friend answers
+
+function submitFriendAnswers(){
+
+const ownerId = new URLSearchParams(window.location.search).get("owner");
+
+const owner = JSON.parse(localStorage.getItem("user_"+ownerId));
+
+if(!owner){ alert("Owner not found"); return; }
+
+const friendName = document.getElementById("friendName").value.trim();
+
+if(!friendName){ alert("Enter your name"); return; }
+
+
+const friendAnswers = owner.answers.map((_,i)=>document.getElementById("friendAnswer"+i).value.trim());
+
+let score = 0;
+
+friendAnswers.forEach((ans,i)=>{ if(ans.toLowerCase()===owner.answers[i].toLowerCase()) score++; });
+
+owner.friends.push({ name:friendName, score:score });
+
+localStorage.setItem("user_"+ownerId, JSON.stringify(owner));
+
+alert(`You scored ${score} / ${owner.answers.length}`);
+
+showScores(owner);
+
+}
+
+
+// Show scores
+
+function showScores(owner){
+
+const tbody = document.querySelector("#scoresTable tbody");
+
+tbody.innerHTML = "";
+
+owner.friends.forEach(f=>{
+
+const row = document.createElement("tr");
+
+row.innerHTML = `<td>${f.name}</td><td>${f.score} / ${owner.answers.length}</td>`;
+
+tbody.appendChild(row);
+
+});
+
+showPage("scorePage");
+
+}
+
+
+// Page switcher
+
+function showPage(id){
+
+document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+
+document.getElementById(id).style.display="block";
+
+}
+
+
+// Splash screen animation
+
+window.addEventListener("DOMContentLoaded", () => {
+
+const splash = document.getElementById("splashScreen");
+
+const text = document.getElementById("derekText");
+
+text.style.width = "0ch";
+
+text.style.animation = "typing 2s steps(12), blink 0.5s step-end infinite";
+
+setTimeout(() => {
+
+splash.style.transition = "opacity 1s";
+
+splash.style.opacity = 0;
+
+setTimeout(()=> splash.style.display="none",1000);
+
+showPage("loginPage");
+
+}, 3000); // total splash duration
+
+});
+
+
+// On load, check friend link
+
+window.onload = ()=>{
+
+const ownerId = new URLSearchParams(window.location.search).get("owner");
+
+if(ownerId){ loadFriendPage(ownerId); }
+
+};
+
+</script>
+
+</body>
+
+</html>
